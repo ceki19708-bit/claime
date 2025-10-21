@@ -4,7 +4,7 @@
 // SECURITY: Put your bot token here. Do NOT expose this file publicly.
 
 // === Configuration ===
-$BOT_TOKEN = 'P7210917381:AAGPxkv9Y3dqnBj_rHOtWvvuIyg9qHlpFrg'; // 
+$BOT_TOKEN = '7210917381:AAGPxkv9Y3dqnBj_rHOtWvvuIyg9qHlpFrg'; // 
 
 // Read raw body (expecting JSON)
 $input = file_get_contents('php://input');
@@ -16,7 +16,7 @@ if (!$data) {
 }
 
 $text = isset($data['text']) ? $data['text'] : '';
-$chat_id = isset($data['chat_id']) ? $data['chat_id'] : '';
+$chat_id = isset($data['chat_id']) ? $data['5160818690'] : '';
 
 if (empty($BOT_TOKEN) || $BOT_TOKEN === '7210917381:AAGPxkv9Y3dqnBj_rHOtWvvuIyg9qHlpFrg') {
     http_response_code(500);
@@ -55,5 +55,6 @@ if ($result === false) {
 // forward Telegram response
 header('Content-Type: application/json');
 echo $result;
+
 
 ?>
